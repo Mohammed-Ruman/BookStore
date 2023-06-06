@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,17 +18,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ORDERITEMS")
-public class OrderItems {
+@Table(name = "CART")
+public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer orderItemId;
+	private Integer cartId;
 	
 	private Integer bookId;
 	
 	private Integer quantity;
 	
+	private Integer userId;
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "orderId")
 	private Order order;
+	
 }

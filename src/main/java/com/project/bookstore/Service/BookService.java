@@ -7,7 +7,7 @@ import com.project.bookstore.Entity.Book;
 public interface BookService {
 
 	//add book
-	Book addBook(Book book);
+	Book addBook(String book);
 	
 	//get book by id
 	Book getBookById(Integer bookId);

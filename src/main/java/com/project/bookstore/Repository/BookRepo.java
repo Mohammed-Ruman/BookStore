@@ -12,6 +12,6 @@ public interface BookRepo extends JpaRepository<Book, Integer>{
 	
 	List<Book> findByBookTitleContaining(String keyword);
 	
-	@Query("select b from Book b where b.bookTitle like :key")
-	List<Book> seachByTitle(@Param("key") String keyword);
+	@Query("select b from Book b where b.bookTitle like %:key%")
+	List<Book> seachByTitle(@Param("key") String key);
 }

@@ -25,10 +25,10 @@ public class BookController {
 	private BookService bookService;
 	
 	//add book
-	@PostMapping("/")
-	public ResponseEntity<Book> addBook(@RequestBody Book book){
+	@PostMapping("/save")
+	public ResponseEntity<Object> addBook(@RequestBody String book){
 		Book addBook = bookService.addBook(book);
-		return new ResponseEntity<Book>(addBook,HttpStatus.CREATED);
+		return new ResponseEntity<Object>(addBook,HttpStatus.CREATED);
 	}
 	
 	//get book by id
@@ -42,7 +42,7 @@ public class BookController {
 	@GetMapping("/books")
 	public ResponseEntity<List<Book>> getAllBook(
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false)Integer pageNumber,
-			@RequestParam(value="pageSize", defaultValue = "2",required = false)Integer pageSize
+			@RequestParam(value="pageSize", defaultValue = "5",required = false)Integer pageSize
 			){
 		List<Book> allBooks = this.bookService.getAllBooks(pageNumber, pageSize);
 		

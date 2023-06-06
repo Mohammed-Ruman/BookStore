@@ -45,11 +45,19 @@ public class Book {
 	@Column(nullable = false )
 	private double price;
 		
-	@JsonIgnore
+	
+	/*
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "book_category",
 	joinColumns = @JoinColumn(name="bookId"),
 	inverseJoinColumns = @JoinColumn(name="categoryId"))
 	private List<Category> categories=new ArrayList<>();
-
+	*/
+	
+	@ManyToMany(cascade = CascadeType.PERSIST) // Change CascadeType.ALL to CascadeType.PERSIST
+	@JoinTable(name = "book_category",
+	    joinColumns = @JoinColumn(name = "bookId"),
+	    inverseJoinColumns = @JoinColumn(name = "categoryId")
+	)
+	private List<Category> categories = new ArrayList<>();
 }

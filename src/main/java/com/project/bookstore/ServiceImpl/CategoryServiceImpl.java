@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> searchCategory(String keyword) {
 		// TODO Auto-generated method stub
 		
-		List<Category> searchByCategory = categoryRepo.searchByCategory("%"+keyword+"%");
+		List<Category> searchByCategory = categoryRepo.searchByCategory(keyword);
 		
 		return searchByCategory;
 	}
