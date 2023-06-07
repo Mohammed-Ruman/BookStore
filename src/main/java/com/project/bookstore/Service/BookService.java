@@ -3,6 +3,7 @@ package com.project.bookstore.Service;
 import java.util.List;
 
 import com.project.bookstore.Entity.Book;
+import com.project.bookstore.Entity.User;
 
 public interface BookService {
 
@@ -18,5 +19,8 @@ public interface BookService {
 	
 	//search book by title
 	List<Book> seachBookByTitle(String keyword);
+	
+	//find book purchased by user
+	List<User> findUserPurchasedBook(Integer bookId);
 	
 }

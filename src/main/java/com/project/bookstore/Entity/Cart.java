@@ -31,6 +31,7 @@ public class Cart {
 	private Integer userId;
 	
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "orderId")
 	private Order order;

@@ -9,5 +9,7 @@ import com.project.bookstore.Entity.Cart;
 public interface CartRepo extends JpaRepository<Cart, Integer>{
 
 	List<Cart> findAllByUserId(Integer userId);
+	
+	List<Cart> findAllByBookId(Integer bookId);
 
 }

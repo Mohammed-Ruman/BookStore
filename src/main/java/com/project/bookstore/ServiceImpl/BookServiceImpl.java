@@ -13,12 +13,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.bookstore.Entity.Book;
+import com.project.bookstore.Entity.Cart;
 import com.project.bookstore.Entity.Category;
+import com.project.bookstore.Entity.User;
 import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Repository.BookRepo;
 import com.project.bookstore.Repository.CategoryRepo;
 import com.project.bookstore.Service.BookService;
+import com.project.bookstore.Service.CartService;
 import com.project.bookstore.Service.CategoryService;
+import com.project.bookstore.Service.UserService;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -28,6 +32,12 @@ public class BookServiceImpl implements BookService{
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private CartService cartService;
+	
+	@Autowired
+	private UserService userService;
 	
 	
 	@Override
@@ -88,6 +98,22 @@ public class BookServiceImpl implements BookService{
 		
 		
 		return seachByTitle;
+	}
+
+	@Override
+	public List<User> findUserPurchasedBook(Integer bookId) {
+		// TODO Auto-generated method stub
+		
+		List<Cart> cartByBookId = cartService.getCartByBookId(bookId);
+		
+		List<User> purchasedUsers=new ArrayList<>();
+		
+		cartByBookId.forEach(cart -> {
+			User userById = userService.getUserById(cart.getUserId());
+			purchasedUsers.add(userById);
+		});
+		
+		return purchasedUsers;
 	}
 	
 
