@@ -5,17 +5,13 @@ import java.util.List;
 import com.project.bookstore.Entity.User;
 
 public interface UserService {
-     //add user
-	
+	// add user
 	User addUser(User user);
-	
-	//get user by id
-	
+
+	// get user by id
 	User getUserById(Integer userId);
-	
-	//get all user
-	
+
+	// get all user
 	List<User> getAllUser();
-	
-	
+
 }

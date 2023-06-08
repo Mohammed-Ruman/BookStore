@@ -20,7 +20,7 @@ public class CartController {
 	
 	
 	//save cart
-	@PostMapping("/save")
+	@PostMapping
 	public ResponseEntity<Object> saveCart(@RequestBody Cart cart){		
 		return new ResponseEntity<Object>(cartService.saveCart(cart),HttpStatus.CREATED);
 	}

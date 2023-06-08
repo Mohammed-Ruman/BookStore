@@ -23,24 +23,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer userId;
-	
-	@Column(name = "USER_NAME",nullable = false)
+
+	@Column(name = "user_name", nullable = false)
 	private String userName;
-	
-	
-	@Column(name="EMAIL",nullable = false)
+
+	@Column(name = "email", nullable = false)
 	private String email;
-	
-	@Column(name="ADDRESS",nullable = false)
+
+	@Column(name = "address", nullable = false)
 	private String address;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	private List<Order> orders=new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Order> orders = new ArrayList<>();
 }

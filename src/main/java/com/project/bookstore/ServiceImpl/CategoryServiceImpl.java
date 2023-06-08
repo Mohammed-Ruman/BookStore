@@ -18,8 +18,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepo categoryRepo;
-	
-	
+
 	@Override
 	public Category addCategory(Category category) {
 		// TODO Auto-generated method stub
@@ -29,30 +28,30 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public Category getCategoryById(Integer categoryId) {
 		// TODO Auto-generated method stub
-		return categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category not found with id : " +categoryId));
+		return categoryRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category not found with id : " + categoryId));
 	}
 
 	@Override
 	public List<Category> getAllCategory(Integer pageNumber, Integer pageSize) {
 		// TODO Auto-generated method stub
-		
-		Pageable pageable=PageRequest.of(pageNumber, pageSize);
-		
+
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
 		Page<Category> categories = this.categoryRepo.findAll(pageable);
-		
+
 		List<Category> contentCategories = categories.getContent();
-		
+
 		return contentCategories;
 	}
 
 	@Override
 	public List<Category> searchCategory(String keyword) {
 		// TODO Auto-generated method stub
-		
+
 		List<Category> searchByCategory = categoryRepo.searchByCategory(keyword);
-		
+
 		return searchByCategory;
 	}
 
-	
 }

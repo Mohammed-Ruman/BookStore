@@ -18,22 +18,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "CART")
+@Table(name = "cart")
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cartId;
-	
+
 	private Integer bookId;
-	
+
 	private Integer quantity;
-	
+
 	private Integer userId;
-	
-	
+
+	private boolean isPurchased;
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "orderId")
 	private Order order;
-	
+
 }

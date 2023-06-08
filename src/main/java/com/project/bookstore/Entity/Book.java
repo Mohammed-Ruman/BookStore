@@ -14,8 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,39 +23,35 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "BOOKS")
+@Table(name = "books")
 @ToString
 public class Book {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer bookId;
-	
-	@Column(nullable = false )
+
+	@Column(name = "book_title", nullable = false)
 	private String bookTitle;
-	
-	@Column(nullable = false )
+
+	@Column(name = "author", nullable = false)
 	private String author;
-	
-	@Column(nullable = false,length = 10000 )
+
+	@Column(name = "description", nullable = false, length = 10000)
 	private String description;
-	
-	@Column(nullable = false )
+
+	@Column(name = "price", nullable = false)
 	private double price;
-		
-	
+
 	/*
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "book_category",
-	joinColumns = @JoinColumn(name="bookId"),
-	inverseJoinColumns = @JoinColumn(name="categoryId"))
-	private List<Category> categories=new ArrayList<>();
-	*/
-	
+	 * @ManyToMany(cascade = CascadeType.ALL)
+	 * 
+	 * @JoinTable(name = "book_category", joinColumns = @JoinColumn(name="bookId"),
+	 * inverseJoinColumns = @JoinColumn(name="categoryId")) private List<Category>
+	 * categories=new ArrayList<>();
+	 */
+
 	@ManyToMany(cascade = CascadeType.PERSIST) // Change CascadeType.ALL to CascadeType.PERSIST
-	@JoinTable(name = "book_category",
-	    joinColumns = @JoinColumn(name = "bookId"),
-	    inverseJoinColumns = @JoinColumn(name = "categoryId")
-	)
+	@JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "bookId"), inverseJoinColumns = @JoinColumn(name = "categoryId"))
 	private List<Category> categories = new ArrayList<>();
 }

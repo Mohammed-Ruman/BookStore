@@ -11,17 +11,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class OrderInfo {
- 
- private User user;
- private Order order;
- private Date orderDate;
 
- public OrderInfo(User user,Order order, Date orderDate) {
-     this.order = order;
-     this.user = user;
-     this.orderDate = orderDate;
- }
+	private User user;
+	private Order order;
+	private Date orderDate;
 
+	public OrderInfo(User user, Order order, Date orderDate) {
+		this.order = order;
+		this.user = user;
+		this.orderDate = orderDate;
+	}
 
 }
-

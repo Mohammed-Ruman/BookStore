@@ -17,10 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,27 +26,26 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ORDERS")
+@Table(name = "orders")
 @ToString
 
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer orderId;
-	
-	@Column(name = "orderDate")
+
+	@Column(name = "order_date")
 	private Date orderDate;
-	
-	@Column(name = "totalPrice")
+
+	@Column(name = "total_price")
 	private double totalPrice;
-	
+
 	@ManyToOne()
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user")
 	private User user;
-	
-	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private List<Cart> cartItems=new ArrayList<>();
+
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Cart> cartItems = new ArrayList<>();
 }

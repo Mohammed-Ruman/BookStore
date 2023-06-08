@@ -3,22 +3,16 @@ package com.project.bookstore.Service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.util.MultiValueMap;
-
 import com.project.bookstore.Entity.Order;
 import com.project.bookstore.Payload.OrderInfo;
 
 public interface OrderService {
-	
-	//save order
-	Order saveOrder(Integer userId);
-	
-	//to find order details between provided date
-	
-	List<OrderInfo> getOrdersByDateRange(Date fromDate, Date toDate);
-		
-	
-	
 
-	
+	// save order
+	Order saveOrder(Integer userId);
+
+	// to find order details between provided date
+
+	List<OrderInfo> getOrdersByDateRange(Date fromDate, Date toDate);
+
 }

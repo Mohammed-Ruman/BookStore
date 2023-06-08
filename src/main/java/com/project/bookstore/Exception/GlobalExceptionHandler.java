@@ -11,8 +11,16 @@ import com.project.bookstore.Payload.ApiResponse;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException ex){
+	public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
 		ApiResponse response = ApiResponse.builder().message(ex.getMessage()).httpStatus(HttpStatus.NOT_FOUND).build();
-		return new ResponseEntity<ApiResponse>(response,HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ApiResponse>(response, HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<ApiResponse> badRequestExceptionHandler(BadRequestException ex) {
+		ApiResponse response = ApiResponse.builder().message(ex.getMessage()).httpStatus(HttpStatus.BAD_REQUEST)
+				.build();
+		return new ResponseEntity<ApiResponse>(response, HttpStatus.BAD_REQUEST);
+	}
+
 }

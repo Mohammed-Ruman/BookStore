@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepo userRepo;
-	
+
 	@Override
 	public User addUser(User user) {
 		// TODO Auto-generated method stub
@@ -25,11 +25,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(Integer userId) {
 		// TODO Auto-generated method stub
-		
-		User user = userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not"
-				+ "found with given id: " + userId));
-		
-		
+
+		User user = userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User not" + "found with given id: " + userId));
+
 		return user;
 	}
 
