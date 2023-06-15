@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -28,12 +29,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "orders")
 @ToString
+@Builder
 
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer orderId;
 
 	@Column(name = "order_date")
@@ -42,7 +45,7 @@ public class Order implements Serializable {
 	@Column(name = "total_price")
 	private double totalPrice;
 
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "user")
 	private User user;
 

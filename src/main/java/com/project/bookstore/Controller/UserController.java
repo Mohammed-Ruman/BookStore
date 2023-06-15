@@ -24,15 +24,13 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<Object> addUser(@RequestBody User user) {
-		User addUser = userService.addUser(user);
-		return new ResponseEntity<Object>(addUser, HttpStatus.CREATED);
+		return new ResponseEntity<Object>(userService.addUser(user), HttpStatus.CREATED);
 	}
 
 	// get user by id
 	@GetMapping("/{userId}")
 	public ResponseEntity<Object> getUserById(@PathVariable Integer userId) {
-		User userById = userService.getUserById(userId);
-		return new ResponseEntity<Object>(userById, HttpStatus.OK);
+		return new ResponseEntity<Object>(userService.getUserById(userId), HttpStatus.OK);
 	}
 
 	// get all user

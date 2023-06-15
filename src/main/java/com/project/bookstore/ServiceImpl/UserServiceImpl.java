@@ -25,11 +25,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(Integer userId) {
 		// TODO Auto-generated method stub
-
-		User user = userRepo.findById(userId)
+		return userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not" + "found with given id: " + userId));
-
-		return user;
 	}
 
 	@Override

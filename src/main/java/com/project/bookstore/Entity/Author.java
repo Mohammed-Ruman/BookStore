@@ -13,34 +13,38 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 @Entity
+@Table(name = "authors")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User {
-
+public class Author {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
-	private Integer userId;
-
-	@Column(name = "user_name", nullable = false)
-	private String userName;
-
+	@Column(name = "id")
+	private Integer authorId;
+	
+	@Column(name = "author_name", nullable = false)
+	private String authorName;
+	
 	@Column(name = "email", nullable = false)
 	private String email;
-
-	@Column(name = "address", nullable = false)
-	private String address;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Order> orders = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<Book> books=new ArrayList<>();
+	
+	
+	
+	
+	
+	
 }

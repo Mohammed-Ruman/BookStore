@@ -35,23 +35,14 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> getAllCategory(Integer pageNumber, Integer pageSize) {
 		// TODO Auto-generated method stub
-
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
-		Page<Category> categories = this.categoryRepo.findAll(pageable);
-
-		List<Category> contentCategories = categories.getContent();
-
-		return contentCategories;
+		return categoryRepo.findAll(pageable).getContent();
 	}
 
 	@Override
 	public List<Category> searchCategory(String keyword) {
 		// TODO Auto-generated method stub
-
-		List<Category> searchByCategory = categoryRepo.searchByCategory(keyword);
-
-		return searchByCategory;
+		return categoryRepo.searchByCategory(keyword);
 	}
 
 }

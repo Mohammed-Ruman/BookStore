@@ -12,6 +12,8 @@ import com.project.bookstore.Entity.Book;
 import com.project.bookstore.Entity.Cart;
 import com.project.bookstore.Entity.Order;
 import com.project.bookstore.Entity.User;
+import com.project.bookstore.Exception.BadRequestException;
+import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Payload.OrderInfo;
 import com.project.bookstore.Repository.CartRepo;
 import com.project.bookstore.Repository.OrderRepo;
@@ -37,7 +39,12 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order saveOrder(Integer userId) {
 		// TODO Auto-generated method stub
-		List<Cart> cartList = cartRepo.findAllByUserIdAndIsPublishedFalse(userId);
+		List<Cart> cartList = cartRepo.findAllByUserIdAndIsPurchasedFalse(userId);
+
+		if (cartList.isEmpty()) {
+			throw new BadRequestException("error : empty cart");
+		}
+
 		double total = 0.0;
 
 		for (Cart cart : cartList) {
@@ -45,19 +52,15 @@ public class OrderServiceImpl implements OrderService {
 			total += book.getPrice() * cart.getQuantity();
 		}
 
-		Order newOrder = new Order();
-
-		newOrder.setCartItems(cartList);
-		newOrder.setTotalPrice(total);
-		newOrder.setOrderDate(new Date());
-		newOrder.setUser(UserService.getUserById(userId));
+		Order newOrder = Order.builder().cartItems(cartList).totalPrice(total).orderDate(new Date())
+				.user(UserService.getUserById(userId)).build();
 
 		Order savedOrder = orderRepo.save(newOrder);
-		for (Cart cart : cartList) {
+		cartList.forEach(cart -> {
 			cart.setOrder(savedOrder);
 			cart.setPurchased(true);
 			cartRepo.save(cart);
-		}
+		});
 
 		return savedOrder;
 
@@ -67,24 +70,34 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderInfo> getOrdersByDateRange(Date fromDate, Date toDate) {
 		// TODO Auto-generated method stub
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(toDate);
-		calendar.add(Calendar.DAY_OF_MONTH, 1);
-
-		Date toDateInclusive = calendar.getTime();
-
-		List<Order> findByDateBetweenOrders = orderRepo.findByOrderDateBetween(fromDate, toDateInclusive);
-
 		List<OrderInfo> orderInfoList = new ArrayList<>();
 
-		for (Order order : findByDateBetweenOrders) {
-
-			User user = UserService.getUserById(order.getUser().getUserId());
-			OrderInfo orderInfo = new OrderInfo(user, order, order.getOrderDate());
-			orderInfoList.add(orderInfo);
-		}
+		orderRepo.findByOrderDateBetween(fromDate, toDate).stream().forEach(order -> {
+			orderInfoList.add( OrderInfo.builder().user(UserService.getUserById(order.getUser().getUserId())).
+				order(order).orderDate(order.getOrderDate()).build());
+		});
 
 		return orderInfoList;
+	}
+
+	@Override
+	public void deleteOrder(Integer orderId) {
+		// TODO Auto-generated method stub
+
+		orderRepo.deleteById(orderId);
+
+		// after deleting the order delete the cart associated with that order id
+		cartRepo.findAllByOrderId(orderId).forEach(cart -> cartRepo.delete(cart));
+
+	}
+
+	@Override
+	public Order getOrderById(Integer orderId) {
+		// TODO Auto-generated method stub
+
+		return orderRepo.findById(orderId)
+				.orElseThrow(() -> new ResourceNotFoundException("Order not found with given orderId"));
+
 	}
 
 }

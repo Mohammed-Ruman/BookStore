@@ -18,16 +18,22 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Cart saveCart(Cart cart) {
 		// TODO Auto-generated method stub
-		return cartRepo.save(cart);
+			
+		Cart cartByBookId = cartRepo.findByUserIdAndBookIdAndIsPurchasedFalse(cart.getUserId(), cart.getBookId());
+
+		if (cartByBookId == null) {
+			return cartRepo.save(cart);
+		} else {
+			cartByBookId.setQuantity(cart.getQuantity()+cartByBookId.getQuantity());
+			return cartRepo.save(cartByBookId);
+		}
 
 	}
 
 	@Override
 	public List<Cart> getCartByBookId(Integer bookId) {
 		// TODO Auto-generated method stub
-		List<Cart> findAllByBookId = cartRepo.findAllByBookId(bookId);
-
-		return findAllByBookId;
+		return cartRepo.findAllByBookId(bookId);
 	}
 
 }

@@ -5,11 +5,13 @@ import java.util.Date;
 import com.project.bookstore.Entity.Order;
 import com.project.bookstore.Entity.User;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Builder
 public class OrderInfo {
 
 	private User user;

@@ -12,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,23 +27,25 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "books")
 @ToString
+@Builder
 public class Book {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer bookId;
 
 	@Column(name = "book_title", nullable = false)
 	private String bookTitle;
-
-	@Column(name = "author", nullable = false)
-	private String author;
 
 	@Column(name = "description", nullable = false, length = 10000)
 	private String description;
 
 	@Column(name = "price", nullable = false)
 	private double price;
+	
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 
 	/*
 	 * @ManyToMany(cascade = CascadeType.ALL)
@@ -50,7 +54,11 @@ public class Book {
 	 * inverseJoinColumns = @JoinColumn(name="categoryId")) private List<Category>
 	 * categories=new ArrayList<>();
 	 */
-
+	
+	@ManyToOne
+	@JoinColumn(name = "author")
+	private Author author;
+	
 	@ManyToMany(cascade = CascadeType.PERSIST) // Change CascadeType.ALL to CascadeType.PERSIST
 	@JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "bookId"), inverseJoinColumns = @JoinColumn(name = "categoryId"))
 	private List<Category> categories = new ArrayList<>();

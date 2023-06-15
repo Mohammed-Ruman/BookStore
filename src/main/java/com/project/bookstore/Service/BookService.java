@@ -16,11 +16,10 @@ public interface BookService {
 	// get all book
 	List<Book> getAllBooks(Integer pageNumber, Integer pageSize, String keywords);
 
-	// search book by title
-
-	// List<Book> seachBookByTitle(String keyword);
-
 	// find book purchased by user
 	List<User> findUserPurchasedBook(Integer bookId);
+	
+	//to delete the book
+	void deleteBook(Integer bookId);
 
 }

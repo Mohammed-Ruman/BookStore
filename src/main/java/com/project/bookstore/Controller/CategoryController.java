@@ -24,14 +24,12 @@ public class CategoryController {
 
 	@PostMapping
 	public ResponseEntity<Object> addCategory(@RequestBody Category category) {
-		Category addCategory = categoryService.addCategory(category);
-		return new ResponseEntity<Object>(addCategory, HttpStatus.CREATED);
+		return new ResponseEntity<Object>(categoryService.addCategory(category), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{categoryId}")
 	public ResponseEntity<Object> getCategoryById(@PathVariable Integer categoryId) {
-		Category categoryById = categoryService.getCategoryById(categoryId);
-		return new ResponseEntity<Object>(categoryById, HttpStatus.OK);
+		return new ResponseEntity<Object>(categoryService.getCategoryById(categoryId), HttpStatus.OK);
 	}
 
 	@GetMapping
@@ -44,7 +42,6 @@ public class CategoryController {
 	// search category
 	@GetMapping("/search/{keyword}")
 	public ResponseEntity<Object> searchCategory(@PathVariable String keyword) {
-		List<Category> searchCategory = categoryService.searchCategory(keyword);
-		return new ResponseEntity<Object>(searchCategory, HttpStatus.OK);
+		return new ResponseEntity<Object>(categoryService.searchCategory(keyword), HttpStatus.OK);
 	}
 }

@@ -1,7 +1,9 @@
 package com.project.bookstore.ServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,35 +48,22 @@ public class BookServiceImpl implements BookService {
 		List<Book> findAllByBookTitleAndAuthor = bookRepo.findAllByBookTitleAndAuthor(bookJson.getString("bookTitle"),
 				bookJson.getString("author"));
 
-		if (findAllByBookTitleAndAuthor != null) {
+		if (!findAllByBookTitleAndAuthor.isEmpty()) {
 			throw new BadRequestException("This book is already added : Duplicate Addition");
 		}
 
 		else {
 
-			Book newBook = new Book();
-
-			newBook.setBookTitle(bookJson.getString("bookTitle"));
-			newBook.setAuthor(bookJson.getString("author"));
-			newBook.setDescription(bookJson.getString("description"));
-			newBook.setPrice(bookJson.getDouble("price"));
-
-			JSONArray catArray = bookJson.getJSONArray("categories");
-
 			List<Category> categories = new ArrayList<Category>();
 
-			// Iterate over the categories array and create Category objects
-			for (int i = 0; i < catArray.length(); i++) {
-				Integer catId = (Integer) catArray.get(i);
-				// Category category = new Category();
-				Category category = categoryService.getCategoryById(catId);
-				categories.add(category);
-			}
-
-			// Set the categories list on the Book object
-			newBook.setCategories(categories);
-
-			return bookRepo.save(newBook);
+			bookJson.getJSONArray("categories").forEach(cart -> {
+				categories.add(categoryService.getCategoryById((Integer) cart));
+			});
+			
+//			Book newBook = Book.builder().bookTitle(bookJson.getString("bookTitle")).author(bookJson.getString("author"))
+//			.description(bookJson.getString("description")).price(bookJson.getDouble("price")).categories(categories).build();
+//			return bookRepo.save(newBook);
+			return null;
 		}
 
 	}
@@ -93,45 +82,26 @@ public class BookServiceImpl implements BookService {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
 		if (keywords == "") {
-
-			Page<Book> bookPage = this.bookRepo.findAll(pageable);
-
-			List<Book> books = bookPage.getContent();
-
-			return books;
+			return bookRepo.findAll(pageable).getContent();
 		} else {
-			Page<Book> byTitlePage = this.bookRepo.seachByTitle(keywords, pageable);
-
-			List<Book> books = byTitlePage.getContent();
-			return books;
+			return bookRepo.seachByTitle(keywords, pageable).getContent();
 		}
 	}
-
-//	@Override
-//	public List<Book> seachBookByTitle(String keyword) {
-//		// TODO Auto-generated method stub
-//		
-//		List<Book> seachByTitle = this.bookRepo.seachByTitle(keyword);
-//		
-//		
-//		
-//		return seachByTitle;
-//	}
 
 	@Override
 	public List<User> findUserPurchasedBook(Integer bookId) {
 		// TODO Auto-generated method stub
 
-		List<Cart> cartByBookId = cartService.getCartByBookId(bookId);
+		return cartService.getCartByBookId(bookId).stream().map(cart -> userService.getUserById(cart.getUserId()))
+				.collect(Collectors.toList());
+	}
 
-		List<User> purchasedUsers = new ArrayList<>();
+	@Override
+	public void deleteBook(Integer bookId) {
+		// TODO Auto-generated method stub
 
-		cartByBookId.forEach(cart -> {
-			User userById = userService.getUserById(cart.getUserId());
-			purchasedUsers.add(userById);
-		});
+		bookRepo.delete(getBookById(bookId));
 
-		return purchasedUsers;
 	}
 
 }
