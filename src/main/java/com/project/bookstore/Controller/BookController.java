@@ -60,8 +60,9 @@ public class BookController {
 	// to delete a book by id
 	@DeleteMapping("/{bookId}")
 	public ResponseEntity<Object> deleteBook(@PathVariable Integer bookId) {
-		bookService.deleteBook(bookId);
-		
-		return ResponseEntity.ok("success : Book deleted");
+		if(bookService.deleteBook(bookId)) {
+			return ResponseEntity.ok("success : Book deleted");
+		}
+		return null;
 	}
 }

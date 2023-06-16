@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,12 +41,8 @@ public class Author {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Book> books=new ArrayList<>();
-	
-	
-	
-	
-	
 	
 }

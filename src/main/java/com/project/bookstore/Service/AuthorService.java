@@ -13,10 +13,13 @@ public interface AuthorService {
 	Author getAuthorById(Integer authorId);
 	
 	//get all authors
-	List<Author> getAllAuthors();
+	List<Author> getAllAuthors(Integer pageNumber,Integer pageSize, String keywords);
 	
 	
 	//delete author
 	void deleteAuthorById(Integer authorId);
+	
+	//update author
+	Author updateAuthorById(Author author, Integer authorId);
 	
 }

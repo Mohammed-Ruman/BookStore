@@ -8,14 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.project.bookstore.Entity.Author;
 import com.project.bookstore.Entity.Book;
 
 public interface BookRepo extends JpaRepository<Book, Integer> {
 
 	List<Book> findByBookTitleContaining(String keyword);
 
-	@Query("select b from Book b where b.bookTitle like %:key%")
-	Page<Book> seachByTitle(@Param("key") String key, Pageable pageable);
+	@Query("select b from Book b where b.bookTitle like %:key% AND b.isDeleted = :isDeleted")
+	Page<Book> seachByTitle(@Param("key") String key, Pageable pageable,@Param("isDeleted") boolean isDeleted);
 
-	List<Book> findAllByBookTitleAndAuthor(String title, String author);
+	List<Book> findAllByBookTitleAndAuthorAndIsDeleted(String title, Author author, boolean isDeleted);
+	
+	@Query("select b from Book b where b.isDeleted = :isDeleted")
+	Page<Book> findAllByIsDeleted(@Param("isDeleted") boolean isDeleted, Pageable pageable);
 }

@@ -45,4 +45,19 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepo.searchByCategory(keyword);
 	}
 
+	@Override
+	public boolean deleteCategoryById(Integer categoryId) {
+		categoryRepo.findById(categoryId).map(category -> {
+			categoryRepo.delete(category);
+			return true;
+		}).orElseThrow(()-> new ResourceNotFoundException("Category not found with category id: " + categoryId));
+		return false;
+	}
+
+	@Override
+	public Category updateCategoryById(Integer categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

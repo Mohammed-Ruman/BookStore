@@ -18,7 +18,9 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -46,14 +48,6 @@ public class Book {
 	
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
-
-	/*
-	 * @ManyToMany(cascade = CascadeType.ALL)
-	 * 
-	 * @JoinTable(name = "book_category", joinColumns = @JoinColumn(name="bookId"),
-	 * inverseJoinColumns = @JoinColumn(name="categoryId")) private List<Category>
-	 * categories=new ArrayList<>();
-	 */
 	
 	@ManyToOne
 	@JoinColumn(name = "author")

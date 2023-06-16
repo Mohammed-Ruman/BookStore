@@ -12,6 +12,12 @@ public interface UserService {
 	User getUserById(Integer userId);
 
 	// get all user
-	List<User> getAllUser();
+	List<User> getAllUser(Integer pageNumber, Integer pageSize, String keywords);
+	
+	//delete user by id
+	boolean deleteUserById(Integer userId);
+	
+	//update user
+	User updateUserById(User user,Integer userId);
 
 }

@@ -17,4 +17,10 @@ public interface CategoryService {
 
 	// search category
 	List<Category> searchCategory(String keyword);
+	
+	//delete category
+	boolean deleteCategoryById(Integer categoryId);
+	
+	//update category
+	Category updateCategoryById(Integer categoryId);
 }

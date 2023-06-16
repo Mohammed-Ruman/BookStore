@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.project.bookstore.Entity.Author;
 import com.project.bookstore.Entity.Book;
 import com.project.bookstore.Entity.Cart;
 import com.project.bookstore.Entity.Category;
@@ -20,6 +21,7 @@ import com.project.bookstore.Entity.User;
 import com.project.bookstore.Exception.BadRequestException;
 import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Repository.BookRepo;
+import com.project.bookstore.Service.AuthorService;
 import com.project.bookstore.Service.BookService;
 import com.project.bookstore.Service.CartService;
 import com.project.bookstore.Service.CategoryService;
@@ -40,13 +42,18 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private AuthorService authorService;
+
 	@Override
 	public Book addBook(String book) {
 		// TODO Auto-generated method stub
 		JSONObject bookJson = new JSONObject(book);
 
-		List<Book> findAllByBookTitleAndAuthor = bookRepo.findAllByBookTitleAndAuthor(bookJson.getString("bookTitle"),
-				bookJson.getString("author"));
+		Author authorById = authorService.getAuthorById(bookJson.getInt("authorId"));
+
+		List<Book> findAllByBookTitleAndAuthor = bookRepo
+				.findAllByBookTitleAndAuthorAndIsDeleted(bookJson.getString("bookTitle"), authorById, false);
 
 		if (!findAllByBookTitleAndAuthor.isEmpty()) {
 			throw new BadRequestException("This book is already added : Duplicate Addition");
@@ -56,14 +63,16 @@ public class BookServiceImpl implements BookService {
 
 			List<Category> categories = new ArrayList<Category>();
 
-			bookJson.getJSONArray("categories").forEach(cart -> {
-				categories.add(categoryService.getCategoryById((Integer) cart));
+			bookJson.getJSONArray("categories").forEach(cat -> {
+				categories.add(categoryService.getCategoryById((Integer) cat));
 			});
-			
-//			Book newBook = Book.builder().bookTitle(bookJson.getString("bookTitle")).author(bookJson.getString("author"))
-//			.description(bookJson.getString("description")).price(bookJson.getDouble("price")).categories(categories).build();
-//			return bookRepo.save(newBook);
-			return null;
+
+			Book newBook = Book.builder().bookTitle(bookJson.getString("bookTitle")).author(authorById)
+					.description(bookJson.getString("description")).isDeleted(false).price(bookJson.getDouble("price"))
+					.categories(categories).build();
+
+			return bookRepo.save(newBook);
+
 		}
 
 	}
@@ -81,10 +90,10 @@ public class BookServiceImpl implements BookService {
 
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-		if (keywords == "") {
-			return bookRepo.findAll(pageable).getContent();
+		if (keywords.isBlank()) {
+			return bookRepo.findAllByIsDeleted(false, pageable).getContent();
 		} else {
-			return bookRepo.seachByTitle(keywords, pageable).getContent();
+			return bookRepo.seachByTitle(keywords, pageable, false).getContent();
 		}
 	}
 
@@ -97,11 +106,17 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public void deleteBook(Integer bookId) {
+	public boolean deleteBook(Integer bookId) {
 		// TODO Auto-generated method stub
 
-		bookRepo.delete(getBookById(bookId));
-
+		Book bookById = getBookById(bookId);
+		if (bookById.isDeleted() == false) {
+			bookById.setDeleted(true);
+			bookRepo.save(bookById);
+			return true;
+		} else {
+			throw new BadRequestException("Error: Book with given id: " + bookId + " already deleted!");
+		}
 	}
 
 }

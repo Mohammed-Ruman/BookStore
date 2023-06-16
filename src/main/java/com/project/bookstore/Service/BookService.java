@@ -20,6 +20,6 @@ public interface BookService {
 	List<User> findUserPurchasedBook(Integer bookId);
 	
 	//to delete the book
-	void deleteBook(Integer bookId);
+	boolean deleteBook(Integer bookId);
 
 }
