@@ -18,9 +18,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -34,7 +32,7 @@ public class Book {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer bookId;
 
 	@Column(name = "book_title", nullable = false)
@@ -45,14 +43,14 @@ public class Book {
 
 	@Column(name = "price", nullable = false)
 	private double price;
-	
+
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "author")
 	private Author author;
-	
+
 	@ManyToMany(cascade = CascadeType.PERSIST) // Change CascadeType.ALL to CascadeType.PERSIST
 	@JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "bookId"), inverseJoinColumns = @JoinColumn(name = "categoryId"))
 	private List<Category> categories = new ArrayList<>();

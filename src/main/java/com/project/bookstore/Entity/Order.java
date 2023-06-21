@@ -36,7 +36,7 @@ public class Order implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer orderId;
 
 	@Column(name = "order_date")

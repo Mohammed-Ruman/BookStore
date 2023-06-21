@@ -19,13 +19,13 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Cart saveCart(Cart cart) {
 		// TODO Auto-generated method stub
-			
+
 		Cart cartByBookId = cartRepo.findByUserIdAndBookIdAndIsPurchasedFalse(cart.getUserId(), cart.getBookId());
 
 		if (cartByBookId == null) {
 			return cartRepo.save(cart);
 		} else {
-			cartByBookId.setQuantity(cart.getQuantity()+cartByBookId.getQuantity());
+			cartByBookId.setQuantity(cart.getQuantity() + cartByBookId.getQuantity());
 			return cartRepo.save(cartByBookId);
 		}
 
@@ -40,10 +40,10 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public boolean deleteCartById(Integer cartId) {
 		// TODO Auto-generated method stub
-		return cartRepo.findById(cartId).map((cart)->{
+		return cartRepo.findById(cartId).map((cart) -> {
 			cartRepo.delete(cart);
 			return true;
-		}).orElseThrow(()->new ResourceNotFoundException("Cart not found with id: " +cartId));
+		}).orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartId));
 	}
 
 }

@@ -34,14 +34,13 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public List<Author> getAllAuthors(Integer pageNumber, Integer pageSize, String keywords) {
 		// TODO Auto-generated method stub
-		Pageable pageable=PageRequest.of(pageNumber, pageSize);
-		if(keywords.isBlank()) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		if (keywords.isBlank()) {
 			return authorRepo.findAll(pageable).getContent();
-		}else {
+		} else {
 			return authorRepo.searchByAuthorName(keywords, pageable).getContent();
 		}
-		
-		
+
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class AuthorServiceImpl implements AuthorService {
 		// TODO Auto-generated method stub
 		return authorRepo.findById(authorId).map(existingAuthor -> {
 			existingAuthor.setAuthorName(author.getAuthorName());
-			existingAuthor.setEmail(author.getEmail()==null ? "sample@sam.com" : author.getEmail());
+			existingAuthor.setEmail(author.getEmail() == null ? "sample@sam.com" : author.getEmail());
 			return authorRepo.save(existingAuthor);
 		}).orElseThrow(() -> new ResourceNotFoundException("Error :Author with id: " + authorId + " not found"));
 	}

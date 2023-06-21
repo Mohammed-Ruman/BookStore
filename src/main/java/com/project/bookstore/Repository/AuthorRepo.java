@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import com.project.bookstore.Entity.Author;
 
 public interface AuthorRepo extends JpaRepository<Author, Integer> {
-	
+
 	@Query("select a from Author a where a.authorName like %:keys%")
-	Page<Author> searchByAuthorName(@Param("keys")String keywords, Pageable pageable);
+	Page<Author> searchByAuthorName(@Param("keys") String keywords, Pageable pageable);
 }

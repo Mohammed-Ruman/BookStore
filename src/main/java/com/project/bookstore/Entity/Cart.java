@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer cartId;
 
 	private Integer bookId;

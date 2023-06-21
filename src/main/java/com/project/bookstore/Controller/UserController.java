@@ -39,24 +39,23 @@ public class UserController {
 	// get all user
 	@GetMapping
 	public ResponseEntity<Object> getAllUser(
-			@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize",defaultValue = "1",required = false) Integer pageSize,
-			@RequestParam(value = "keywords",defaultValue = "",required = false) String keyword
-			) {
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "1", required = false) Integer pageSize,
+			@RequestParam(value = "keywords", defaultValue = "", required = false) String keyword) {
 		return new ResponseEntity<Object>(userService.getAllUser(pageNumber, pageSize, keyword), HttpStatus.OK);
 	}
-	
-	//delete user
+
+	// delete user
 	@DeleteMapping
 	public ResponseEntity<Object> deleteUser(@RequestParam(value = "userId") Integer userId) {
 		userService.deleteUserById(userId);
 		return ResponseEntity.ok("Success : User deleted");
 	}
-	
-	//update user
+
+	// update user
 	@PutMapping
-	public ResponseEntity<Object> updateUser(@RequestBody User user ,@RequestParam(value = "userId") Integer userId) {
+	public ResponseEntity<Object> updateUser(@RequestBody User user, @RequestParam(value = "userId") Integer userId) {
 		return new ResponseEntity<Object>(userService.updateUserById(user, userId), HttpStatus.OK);
 	}
-	
+
 }

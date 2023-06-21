@@ -1,21 +1,17 @@
 package com.project.bookstore.ServiceImpl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.bookstore.Entity.Author;
 import com.project.bookstore.Entity.Book;
-import com.project.bookstore.Entity.Cart;
 import com.project.bookstore.Entity.Category;
 import com.project.bookstore.Entity.User;
 import com.project.bookstore.Exception.BadRequestException;
@@ -117,6 +113,25 @@ public class BookServiceImpl implements BookService {
 		} else {
 			throw new BadRequestException("Error: Book with given id: " + bookId + " already deleted!");
 		}
+	}
+
+	@Override
+	public List<Book> getAllBooksByCategoryId(Integer categoryId) {
+		// TODO Auto-generated method stub
+		List<Book> findByCategoryId = bookRepo.findByCategoryId(categoryId);
+
+		return findByCategoryId;
+	}
+
+	@Override
+	public void updateBookCategory(Integer categoryId) {
+		// TODO Auto-generated method stub
+
+		getAllBooksByCategoryId(categoryId).forEach(book -> {
+			book.getCategories().removeIf(category -> category.getCategoryId() == categoryId);
+			bookRepo.save(book);
+		});
+
 	}
 
 }

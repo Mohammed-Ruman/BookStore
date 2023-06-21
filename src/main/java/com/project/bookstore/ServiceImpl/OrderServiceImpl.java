@@ -1,7 +1,6 @@
 package com.project.bookstore.ServiceImpl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.project.bookstore.Entity.Book;
 import com.project.bookstore.Entity.Cart;
 import com.project.bookstore.Entity.Order;
-import com.project.bookstore.Entity.User;
 import com.project.bookstore.Exception.BadRequestException;
 import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Payload.OrderInfo;
@@ -73,8 +71,8 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderInfo> orderInfoList = new ArrayList<>();
 
 		orderRepo.findByOrderDateBetween(fromDate, toDate).stream().forEach(order -> {
-			orderInfoList.add( OrderInfo.builder().user(UserService.getUserById(order.getUser().getUserId())).
-				order(order).orderDate(order.getOrderDate()).build());
+			orderInfoList.add(OrderInfo.builder().user(UserService.getUserById(order.getUser().getUserId()))
+					.order(order).orderDate(order.getOrderDate()).build());
 		});
 
 		return orderInfoList;

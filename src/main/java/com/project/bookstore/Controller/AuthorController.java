@@ -19,45 +19,43 @@ import com.project.bookstore.Service.AuthorService;
 @RestController
 @RequestMapping("/author")
 public class AuthorController {
-	
+
 	@Autowired
 	private AuthorService authorService;
-	
-	//add new author
+
+	// add new author
 	@PostMapping
-	public ResponseEntity<Object> addNewAuthor(@RequestBody Author author){		
-		return new ResponseEntity<Object>(authorService.addAuthor(author),HttpStatus.CREATED);
+	public ResponseEntity<Object> addNewAuthor(@RequestBody Author author) {
+		return new ResponseEntity<Object>(authorService.addAuthor(author), HttpStatus.CREATED);
 	}
-	
-	//get all author
+
+	// get all author
 	@GetMapping
 	public ResponseEntity<Object> getAllAuthor(
-			@RequestParam(value = "pageNumber", defaultValue = "0", required = false)Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false)Integer pageSize,
-			@RequestParam(value = "keywords", defaultValue = "", required = false)String keywords
-			){
-		return new ResponseEntity<Object>(authorService.getAllAuthors(pageNumber,pageSize,keywords),HttpStatus.OK);
-	}		
-	
-	//get author by id
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+			@RequestParam(value = "keywords", defaultValue = "", required = false) String keywords) {
+		return new ResponseEntity<Object>(authorService.getAllAuthors(pageNumber, pageSize, keywords), HttpStatus.OK);
+	}
+
+	// get author by id
 	@GetMapping("/{authorId}")
-	public ResponseEntity<Object> getAuthorById(@PathVariable Integer authorId){
+	public ResponseEntity<Object> getAuthorById(@PathVariable Integer authorId) {
 		return ResponseEntity.ok(authorService.getAuthorById(authorId));
 	}
-	
-	
-	//delete author
+
+	// delete author
 	@DeleteMapping
-	public ResponseEntity<Object> deleteAuthorById(@RequestParam(name = "authorId" ) Integer authorId){
+	public ResponseEntity<Object> deleteAuthorById(@RequestParam(name = "authorId") Integer authorId) {
 		authorService.deleteAuthorById(authorId);
 		return ResponseEntity.ok("Success : Author Deleted");
 	}
-	
-	//update author
+
+	// update author
 	@PutMapping
 	public ResponseEntity<Object> updateAuthorById(@RequestBody Author author,
-			@RequestParam(name = "authorId" ) Integer authorId){
+			@RequestParam(name = "authorId") Integer authorId) {
 		return new ResponseEntity<Object>(authorService.updateAuthorById(author, authorId), HttpStatus.OK);
 	}
-	
+
 }

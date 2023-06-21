@@ -18,8 +18,14 @@ public interface BookService {
 
 	// find book purchased by user
 	List<User> findUserPurchasedBook(Integer bookId);
-	
-	//to delete the book
+
+	// to delete the book
 	boolean deleteBook(Integer bookId);
+
+	// to get all books by category id
+	List<Book> getAllBooksByCategoryId(Integer categoryId);
+
+	// update book category
+	void updateBookCategory(Integer categoryId);
 
 }

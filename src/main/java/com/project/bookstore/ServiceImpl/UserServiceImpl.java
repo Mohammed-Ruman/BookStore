@@ -34,15 +34,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAllUser(Integer pageNumber, Integer pageSize, String keywords) {
 		// TODO Auto-generated method stub
-		Pageable pageable=PageRequest.of(pageNumber, pageSize);
-		if(keywords.isBlank()) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		if (keywords.isBlank()) {
 			return userRepo.findAll(pageable).getContent();
-		}else {			
-		return userRepo.searchUserByUserName(keywords, pageable).getContent();
+		} else {
+			return userRepo.searchUserByUserName(keywords, pageable).getContent();
 		}
 	}
-	
-	//delete user
+
+	// delete user
 	public boolean deleteUserById(Integer userId) {
 		userRepo.delete(getUserById(userId));
 		return true;
@@ -51,13 +51,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUserById(User user, Integer userId) {
 		// TODO Auto-generated method stub
-		return userRepo.findById(userId).map((existingUser)->{
+		return userRepo.findById(userId).map((existingUser) -> {
 			existingUser.setUserName(user.getUserName());
 			existingUser.setEmail(user.getEmail());
 			existingUser.setAddress(user.getAddress());
 			return userRepo.save(existingUser);
-		}).orElseThrow(()-> new ResourceNotFoundException("User with id: " + userId +" not found "));
+		}).orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found "));
 	}
-	
 
 }

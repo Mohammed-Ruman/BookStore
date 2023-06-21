@@ -13,11 +13,11 @@ public interface OrderService {
 
 	// to find order details between provided date
 	List<OrderInfo> getOrdersByDateRange(Date fromDate, Date toDate);
-	
-	//to delete order
+
+	// to delete order
 	void deleteOrder(Integer orderId);
-	
-	//to find order details by orderId
+
+	// to find order details by orderId
 	Order getOrderById(Integer orderId);
 
 }
