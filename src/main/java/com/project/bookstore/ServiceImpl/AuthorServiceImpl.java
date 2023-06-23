@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.bookstore.Entity.Author;
+import com.project.bookstore.Exception.BadRequestException;
 import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Repository.AuthorRepo;
 import com.project.bookstore.Service.AuthorService;
@@ -21,6 +22,9 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public Author addAuthor(Author author) {
 		// TODO Auto-generated method stub
+		if(authorRepo.findByAuthorNameAndEmail(author.getAuthorName(), author.getEmail()).isPresent()) {
+			throw new BadRequestException("Error : Author already present");
+		}
 		return authorRepo.save(author);
 	}
 
@@ -35,11 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
 	public List<Author> getAllAuthors(Integer pageNumber, Integer pageSize, String keywords) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-		if (keywords.isBlank()) {
-			return authorRepo.findAll(pageable).getContent();
-		} else {
-			return authorRepo.searchByAuthorName(keywords, pageable).getContent();
-		}
+		return keywords.isBlank()? authorRepo.findAll(pageable).getContent():authorRepo.searchByAuthorName(keywords, pageable).getContent();
 
 	}
 
@@ -53,8 +53,8 @@ public class AuthorServiceImpl implements AuthorService {
 	public Author updateAuthorById(Author author, Integer authorId) {
 		// TODO Auto-generated method stub
 		return authorRepo.findById(authorId).map(existingAuthor -> {
-			existingAuthor.setAuthorName(author.getAuthorName());
-			existingAuthor.setEmail(author.getEmail() == null ? "sample@sam.com" : author.getEmail());
+			existingAuthor.setAuthorName(author.getAuthorName()==null? existingAuthor.getAuthorName():author.getAuthorName());
+			existingAuthor.setEmail(author.getEmail() == null ? existingAuthor.getEmail() : author.getEmail());
 			return authorRepo.save(existingAuthor);
 		}).orElseThrow(() -> new ResourceNotFoundException("Error :Author with id: " + authorId + " not found"));
 	}

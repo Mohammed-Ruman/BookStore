@@ -13,14 +13,11 @@ public interface CategoryService {
 	Category getCategoryById(Integer categoryId);
 
 	// get all category
-	List<Category> getAllCategory(Integer pageNumber, Integer pageSize);
-
-	// search category
-	List<Category> searchCategory(String keyword);
+	List<Category> getAllCategory(Integer pageNumber, Integer pageSize,String keyword);
 
 	// delete category
 	boolean deleteCategoryById(Integer categoryId);
 
 	// update category
-	Category updateCategoryById(Integer categoryId);
+	Category updateCategoryById(Integer categoryId, Category category);
 }

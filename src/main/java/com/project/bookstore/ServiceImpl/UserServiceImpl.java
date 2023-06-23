@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.bookstore.Entity.User;
+import com.project.bookstore.Exception.BadRequestException;
 import com.project.bookstore.Exception.ResourceNotFoundException;
 import com.project.bookstore.Repository.UserRepo;
 import com.project.bookstore.Service.UserService;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User addUser(User user) {
 		// TODO Auto-generated method stub
+		if(userRepo.findByUserNameAndEmail(user.getUserName(), user.getEmail()).isPresent()) {
+			throw new BadRequestException("Error : Duplicate user");
+		}
 		return userRepo.save(user);
 	}
 
@@ -35,11 +39,7 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUser(Integer pageNumber, Integer pageSize, String keywords) {
 		// TODO Auto-generated method stub
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-		if (keywords.isBlank()) {
-			return userRepo.findAll(pageable).getContent();
-		} else {
-			return userRepo.searchUserByUserName(keywords, pageable).getContent();
-		}
+		return keywords.isBlank()? userRepo.findAll(pageable).getContent():userRepo.searchUserByUserName(keywords, pageable).getContent();
 	}
 
 	// delete user
@@ -52,9 +52,9 @@ public class UserServiceImpl implements UserService {
 	public User updateUserById(User user, Integer userId) {
 		// TODO Auto-generated method stub
 		return userRepo.findById(userId).map((existingUser) -> {
-			existingUser.setUserName(user.getUserName());
-			existingUser.setEmail(user.getEmail());
-			existingUser.setAddress(user.getAddress());
+			existingUser.setUserName(user.getUserName()==null? existingUser.getUserName():user.getUserName());
+			existingUser.setEmail(user.getEmail()==null?existingUser.getEmail():user.getEmail());
+			existingUser.setAddress(user.getAddress()==null?existingUser.getAddress():user.getAddress());
 			return userRepo.save(existingUser);
 		}).orElseThrow(() -> new ResourceNotFoundException("User with id: " + userId + " not found "));
 	}

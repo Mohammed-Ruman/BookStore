@@ -118,9 +118,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<Book> getAllBooksByCategoryId(Integer categoryId) {
 		// TODO Auto-generated method stub
-		List<Book> findByCategoryId = bookRepo.findByCategoryId(categoryId);
-
-		return findByCategoryId;
+		return bookRepo.findByCategoryId(categoryId);
 	}
 
 	@Override

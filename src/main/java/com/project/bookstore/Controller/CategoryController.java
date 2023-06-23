@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,23 +35,23 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<Object> getAllCategory(
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize) {
-		return new ResponseEntity<Object>(categoryService.getAllCategory(pageNumber, pageSize), HttpStatus.OK);
-	}
-
-	// search category
-	@GetMapping("/search/{keyword}")
-	public ResponseEntity<Object> searchCategory(@PathVariable String keyword) {
-		return new ResponseEntity<Object>(categoryService.searchCategory(keyword), HttpStatus.OK);
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+			@RequestParam(value="keywords", defaultValue = "",required = false)String keywords) {
+		return new ResponseEntity<Object>(categoryService.getAllCategory(pageNumber, pageSize,keywords), HttpStatus.OK);
 	}
 
 	// delete category
 	@DeleteMapping("/{categoryId}")
 	public ResponseEntity<Object> deleteCategory(@PathVariable Integer categoryId) {
-		if (categoryService.deleteCategoryById(categoryId)) {
-			return ResponseEntity.ok("Success : Category deleted");
-		} else {
-			return null;
-		}
+		boolean isDeleted = categoryService.deleteCategoryById(categoryId);
+		return isDeleted ? ResponseEntity.ok("Success : Category deleted") : null;
 	}
+	
+	//update category by id
+	@PutMapping
+	public ResponseEntity<Object> updateCategory(@RequestParam(value = "categoryId") Integer categoryId, @RequestBody Category category) {
+		return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, category));
+	}
+	
+	
 }
