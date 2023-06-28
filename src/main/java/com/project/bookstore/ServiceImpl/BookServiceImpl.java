@@ -1,7 +1,11 @@
 package com.project.bookstore.ServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.json.JSONObject;
@@ -16,7 +20,9 @@ import com.project.bookstore.Entity.Category;
 import com.project.bookstore.Entity.User;
 import com.project.bookstore.Exception.BadRequestException;
 import com.project.bookstore.Exception.ResourceNotFoundException;
+import com.project.bookstore.Payload.BookApiResponse;
 import com.project.bookstore.Repository.BookRepo;
+import com.project.bookstore.Repository.OrderRepo;
 import com.project.bookstore.Service.AuthorService;
 import com.project.bookstore.Service.BookService;
 import com.project.bookstore.Service.CartService;
@@ -41,6 +47,9 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private AuthorService authorService;
 
+	@Autowired
+	private OrderRepo orderRepo;
+
 	@Override
 	public Book addBook(String book) {
 		// TODO Auto-generated method stub
@@ -62,7 +71,6 @@ public class BookServiceImpl implements BookService {
 			bookJson.getJSONArray("categories").forEach(cat -> {
 				categories.add(categoryService.getCategoryById((Integer) cat));
 			});
-
 			Book newBook = Book.builder().bookTitle(bookJson.getString("bookTitle")).author(authorById)
 					.description(bookJson.getString("description")).isDeleted(false).price(bookJson.getDouble("price"))
 					.categories(categories).build();
@@ -130,6 +138,83 @@ public class BookServiceImpl implements BookService {
 			bookRepo.save(book);
 		});
 
+	}
+
+	
+
+	@Override
+	public Book updateBook(String book, Integer bookId) {
+		// TODO Auto-generated method stub
+		JSONObject updateBook = new JSONObject(book);
+
+		return bookRepo.findByBookIdAndIsDeleted(bookId, false).map(existingBook -> {
+			existingBook.setBookTitle(updateBook.getString("bookTitle") == null ? existingBook.getBookTitle()
+					: updateBook.getString("bookTitle"));
+			if (updateBook.has("authorId") && existingBook.getAuthor().getAuthorId() != updateBook.getInt("authorId")) {
+				existingBook.setAuthor(authorService.getAuthorById(updateBook.getInt("authorId")));
+			}
+			existingBook.setDescription(updateBook.has("description") ? updateBook.getString("description")
+					: existingBook.getDescription());
+			existingBook.setPrice(updateBook.has("price") ? updateBook.getDouble("price") : existingBook.getPrice());
+			if (updateBook.has("categories")) {
+				List<Category> categories = new ArrayList<Category>();
+				updateBook.getJSONArray("categories").forEach(cat -> {
+					categories.add(categoryService.getCategoryById((Integer) cat));
+				});
+				existingBook.setCategories(categories);
+			}
+			return bookRepo.save(existingBook);
+
+		}).orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + bookId));
+
+	}
+ 
+	@Override
+	public BookApiResponse getMostSoldBook() {
+		// TODO Auto-generated method stub
+		Map<Integer, Integer> soldBookMap = new HashMap<>();
+
+		orderRepo.findAll().forEach(order -> {
+			order.getCartItems().forEach(cart -> {
+				if (soldBookMap.containsKey(cart.getBookId())) {
+					soldBookMap.put(cart.getBookId(), soldBookMap.get(cart.getBookId()) + cart.getQuantity());
+				} else {
+					soldBookMap.put(cart.getBookId(), cart.getQuantity());
+				}
+			});
+		});
+		Integer highestSoldBookId = soldBookMap.entrySet().stream().max(Map.Entry.comparingByValue())
+				.map(Map.Entry::getKey).orElse(null);
+
+		Book bookById = getBookById(highestSoldBookId);
+
+		return BookApiResponse.builder().bookTitle(bookById.getBookTitle())
+				.authorName(bookById.getAuthor().getAuthorName()).description(bookById.getDescription())
+				.numberOfCopiesSold(soldBookMap.get(highestSoldBookId)).build();
+	}
+	
+	@Override
+	public BookApiResponse getLeastSoldBook() {
+		// TODO Auto-generated method stub
+		Map<Integer, Integer> soldBookMap = new HashMap<>();
+
+		orderRepo.findAll().forEach(order -> {
+			order.getCartItems().forEach(cart -> {
+				if (soldBookMap.containsKey(cart.getBookId())) {
+					soldBookMap.put(cart.getBookId(), soldBookMap.get(cart.getBookId()) + cart.getQuantity());
+				} else {
+					soldBookMap.put(cart.getBookId(), cart.getQuantity());
+				}
+			});
+		});
+		Integer lowestSoldBookId = soldBookMap.entrySet().stream().min(Map.Entry.comparingByValue())
+				.map(Map.Entry::getKey).orElse(null);
+		Book bookById = getBookById(lowestSoldBookId);
+		System.out.println(soldBookMap.toString());
+		
+		return BookApiResponse.builder().bookTitle(bookById.getBookTitle())
+				.authorName(bookById.getAuthor().getAuthorName()).description(bookById.getDescription())
+				.numberOfCopiesSold(soldBookMap.get(lowestSoldBookId)).build();
 	}
 
 }

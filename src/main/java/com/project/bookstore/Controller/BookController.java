@@ -28,6 +28,13 @@ public class BookController {
 
 		return new ResponseEntity<Object>(bookService.addBook(book), HttpStatus.CREATED);
 	}
+	
+	//update book
+	@PutMapping("/{bookId}")
+	public ResponseEntity<Object> updateBook(@RequestBody String book, @PathVariable Integer bookId) {
+
+		return ResponseEntity.ok(bookService.updateBook(book, bookId));
+	}
 
 	// get book by id
 	@GetMapping("/{bookId}")
@@ -76,4 +83,15 @@ public class BookController {
 		bookService.updateBookCategory(categoryId);
 		return ResponseEntity.ok("success : done");
 	}
+	
+	@GetMapping("/purchased/mostsoldbook")
+	public ResponseEntity<Object> getMostSoldBook() {
+		return ResponseEntity.ok(bookService.getMostSoldBook());
+	}
+	
+	@GetMapping("/purchased/leastsoldbook")
+	public ResponseEntity<Object> getLeastSoldBook() {
+		return ResponseEntity.ok(bookService.getLeastSoldBook());
+	}
+	
 }

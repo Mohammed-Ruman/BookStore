@@ -14,5 +14,9 @@ public interface CartService {
 
 	// delete cart
 	boolean deleteCartById(Integer cartId);
+	
+	//get all cart by userid
+	
+	List<Cart> getAllByUserId(Integer userId);
 
 }

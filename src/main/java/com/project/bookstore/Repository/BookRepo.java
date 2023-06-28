@@ -1,6 +1,7 @@
 package com.project.bookstore.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,6 @@ public interface BookRepo extends JpaRepository<Book, Integer> {
 
 	@Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
 	List<Book> findByCategoryId(@Param("categoryId") Integer categoryId);
+	
+	Optional<Book> findByBookIdAndIsDeleted(Integer bookId, boolean isDeleted);
 }

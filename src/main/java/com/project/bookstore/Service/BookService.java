@@ -4,11 +4,15 @@ import java.util.List;
 
 import com.project.bookstore.Entity.Book;
 import com.project.bookstore.Entity.User;
+import com.project.bookstore.Payload.BookApiResponse;
 
 public interface BookService {
 
 	// add book
 	Book addBook(String book);
+	
+	//update book
+	Book updateBook(String book, Integer bookId);
 
 	// get book by id
 	Book getBookById(Integer bookId);
@@ -27,5 +31,11 @@ public interface BookService {
 
 	// update book category
 	void updateBookCategory(Integer categoryId);
+	
+	//most sold book
+	BookApiResponse getMostSoldBook();
+	
+	//least sold book
+	BookApiResponse getLeastSoldBook();
 
 }
