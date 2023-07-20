@@ -6,7 +6,7 @@ import com.project.bookstore.Entity.User;
 
 public interface UserService {
 	// add user
-	User addUser(User user);
+	User addUser(User user, Integer userId);
 
 	// get user by id
 	User getUserById(Integer userId);

@@ -7,7 +7,7 @@ import com.project.bookstore.Entity.Author;
 public interface AuthorService {
 
 	// add author
-	Author addAuthor(Author author);
+	Author addAuthor(Author author, Integer authorId);
 
 	// get author by id
 	Author getAuthorById(Integer authorId);

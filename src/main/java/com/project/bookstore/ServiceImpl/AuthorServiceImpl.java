@@ -1,6 +1,7 @@
 package com.project.bookstore.ServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +21,18 @@ public class AuthorServiceImpl implements AuthorService {
 	private AuthorRepo authorRepo;
 
 	@Override
-	public Author addAuthor(Author author) {
+	public Author addAuthor(Author author, Integer authorId) {
 		// TODO Auto-generated method stub
-		if(authorRepo.findByAuthorNameAndEmail(author.getAuthorName(), author.getEmail()).isPresent()) {
-			throw new BadRequestException("Error : Author already present");
+		Optional<Author> findByAuthorNameAndEmail = authorRepo.findByAuthorNameAndEmail(author.getAuthorName(), author.getEmail());
+		if(findByAuthorNameAndEmail.isPresent()) {
+			if(findByAuthorNameAndEmail.get().getIsDisabled()) {
+				throw new BadRequestException("Error : Author is disabled");
+			}
+			else {
+				throw new BadRequestException("Error : Author already present");
+			}
 		}
-		return authorRepo.save(author);
+		return authorId==0? authorRepo.save(author):updateAuthorById(author, authorId);
 	}
 
 	@Override
@@ -46,7 +53,10 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public void deleteAuthorById(Integer authorId) {
 		// TODO Auto-generated method stub
-		authorRepo.delete(getAuthorById(authorId));
+		authorRepo.findById(authorId).map(author->{
+			author.setIsDisabled(true);
+			return authorRepo.save(author);
+		}).orElseThrow(()-> new ResourceNotFoundException("Author not found with given id: " + authorId));
 	}
 
 	@Override

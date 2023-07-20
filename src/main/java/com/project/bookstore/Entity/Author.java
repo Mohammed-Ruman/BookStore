@@ -38,6 +38,9 @@ public class Author {
 
 	@Column(name = "email", nullable = false)
 	private String email;
+	
+	@Column(name="is_disabled")
+	private Boolean isDisabled;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

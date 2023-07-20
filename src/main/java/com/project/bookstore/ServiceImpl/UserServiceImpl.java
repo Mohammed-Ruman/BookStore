@@ -20,12 +20,12 @@ public class UserServiceImpl implements UserService {
 	private UserRepo userRepo;
 
 	@Override
-	public User addUser(User user) {
+	public User addUser(User user, Integer userId) {
 		// TODO Auto-generated method stub
 		if(userRepo.findByUserNameAndEmail(user.getUserName(), user.getEmail()).isPresent()) {
 			throw new BadRequestException("Error : Duplicate user");
 		}
-		return userRepo.save(user);
+		return userId==0? userRepo.save(user):updateUserById(user, userId);
 	}
 
 	@Override
