@@ -62,6 +62,8 @@ public class BookServiceImpl implements BookService {
 
 		if (!findAllByBookTitleAndAuthor.isEmpty()) {
 			throw new BadRequestException("This book is already added : Duplicate Addition");
+		}else if(authorById.getIsDisabled()) {
+			throw new BadRequestException("Error : Author is disabled");
 		}
 
 		else {
@@ -95,9 +97,9 @@ public class BookServiceImpl implements BookService {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
 		if (keywords.isBlank()) {
-			return bookRepo.findAllByIsDeleted(false, pageable).getContent();
+			return filterBookByAuthor( bookRepo.findAllByIsDeleted(false, pageable).getContent());
 		} else {
-			return bookRepo.seachByTitle(keywords, pageable, false).getContent();
+			return filterBookByAuthor( bookRepo.seachByTitle(keywords, pageable, false).getContent());
 		}
 	}
 
@@ -215,6 +217,10 @@ public class BookServiceImpl implements BookService {
 		return BookApiResponse.builder().bookTitle(bookById.getBookTitle())
 				.authorName(bookById.getAuthor().getAuthorName()).description(bookById.getDescription())
 				.numberOfCopiesSold(soldBookMap.get(lowestSoldBookId)).build();
+	}
+	
+	public List<Book> filterBookByAuthor(List<Book> books){
+		return books.stream().filter(book->!book.getAuthor().getIsDisabled()).toList();
 	}
 
 }

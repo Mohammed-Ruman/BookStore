@@ -25,8 +25,9 @@ public class AuthorController {
 
 	// add new author
 	@PostMapping
-	public ResponseEntity<Object> addNewAuthor(@RequestBody Author author) {
-		return new ResponseEntity<Object>(authorService.addAuthor(author), HttpStatus.CREATED);
+	public ResponseEntity<Object> addNewAuthor(@RequestBody Author author,
+			@RequestParam(value = "authorId", defaultValue = "0", required = false)Integer authorId) {
+		return new ResponseEntity<Object>(authorService.addAuthor(author,authorId), HttpStatus.CREATED);
 	}
 
 	// get all author

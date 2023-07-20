@@ -1,5 +1,7 @@
 package com.project.bookstore.Controller;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bookstore.Entity.Category;
 import com.project.bookstore.Service.CategoryService;
+import com.project.bookstore.Service.JasperReportService;
+
+import net.sf.jasperreports.engine.JRException;
 
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private JasperReportService reportService;
 
 	@PostMapping
 	public ResponseEntity<Object> addCategory(@RequestBody Category category) {
@@ -51,6 +59,11 @@ public class CategoryController {
 	@PutMapping
 	public ResponseEntity<Object> updateCategory(@RequestParam(value = "categoryId") Integer categoryId, @RequestBody Category category) {
 		return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, category));
+	}
+	
+	@GetMapping("/getreport")
+	public ResponseEntity<Object> getCategoryReport() throws FileNotFoundException, JRException {
+		return new ResponseEntity<Object>(reportService.exportCategoryReport(), HttpStatus.OK);
 	}
 	
 	

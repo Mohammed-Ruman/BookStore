@@ -26,8 +26,9 @@ public class UserController {
 	// add user
 
 	@PostMapping
-	public ResponseEntity<Object> addUser(@RequestBody User user) {
-		return new ResponseEntity<Object>(userService.addUser(user), HttpStatus.CREATED);
+	public ResponseEntity<Object> addUser(@RequestBody User user,
+			@RequestParam(value = "userId", defaultValue = "0", required = false) Integer userId) {
+		return new ResponseEntity<Object>(userService.addUser(user,userId), HttpStatus.CREATED);
 	}
 
 	// get user by id
